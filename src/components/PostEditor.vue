@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import sourceData from '@/data.json'
+
 export default {
   name: 'PostEditor',
   data () {
@@ -22,12 +22,8 @@ export default {
   },
   methods: {
     save () {
-      const postId = 'gggg' + Math.random()
       const post = {
-        id: postId,
-        text: this.text,
-        publishedAt: Math.floor(Date.now() / 1000),
-        userId: 'rpbB8C6ifrYmNDufMERWfQUoa202'
+        text: this.text
       }
       this.$emit('save', { post })
       // console.log(post)
