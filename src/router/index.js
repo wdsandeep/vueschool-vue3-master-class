@@ -45,7 +45,7 @@ const routes = [
     name: 'ThreadShow',
     component: ThreadShow,
     props: true,
-    beforeEnter (to, from, next) {
+    beforeEnter1 (to, from, next) {
       // check if thread exists
       const threadExists = findById(store.state.threads, to.params.id)
       // if exists continue
@@ -78,8 +78,7 @@ const routes = [
     component: NotFound
   }
 ]
-
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior (to) {
@@ -89,3 +88,9 @@ export default createRouter({
     return scroll // { top: 0, behavior: 'smooth' } //scroll
   }
 })
+
+router.beforeEach(() => {
+  store.dispatch('unsubscribeAllSnapshots')
+})
+
+export default router

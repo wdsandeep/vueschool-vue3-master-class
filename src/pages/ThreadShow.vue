@@ -13,7 +13,7 @@
       </router-link>
     </h1>
     <p>
-      By <a href="#" class="link-unstyled">{{ thread.author.name }}</a>, <AppDate :timestamp="thread.publishedAt" />.
+      By <a href="#" class="link-unstyled">{{ thread.author?.name }}</a>, <AppDate :timestamp="thread.publishedAt" />.
       <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">{{ thread.repliesCount }} replies by {{ thread.contributorsCount }} contributors</span>
     </p>
     <post-list :posts="threadPosts" />
@@ -27,6 +27,7 @@
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
 import AppDate from '@/components/AppDate'
+import { mapActions } from 'vuex'
 
 export default {
   props: {
@@ -56,13 +57,24 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['fetchThread', 'fetchUser', 'fetchPosts', 'fetchUsers', 'createPost']),
     addPost (eventData) {
       const post = {
         ...eventData.post,
         threadId: this.id
       }
-      this.$store.dispatch('createPost', post)
+      this.createPost(post)
     }
+  },
+  async created () {
+    // fetch the thread
+    const thread = await this.fetchThread({ id: this.id })
+
+    // fetch the posts
+    const posts = await this.fetchPosts({ ids: thread.posts })
+    // fetch the users associated with posts
+    const users = posts.map(post => post.userId).concat(thread.userId)
+    this.fetchUsers({ ids: users })
   }
 
 }

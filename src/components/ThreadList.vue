@@ -1,6 +1,5 @@
 <template>
   <div class="col-full">
-
     <div class="thread-list">
 
       <h2 class="list-title">Threads</h2>
@@ -50,18 +49,22 @@ export default {
   },
   computed: {
     posts () {
-      return this.$store.state.posts
+      return this.$store.state.posts || []
     },
     users () {
-      return this.$store.state.users
+      return this.$store.state.users || []
+    },
+    userById () {
+      return (userId) => findById(this.users, userId) || {}
     }
   },
   methods: {
-    userById (userId) {
-      return findById(this.users, userId)
+    postById (postId) {
+      return findById(this.posts, postId)
     }
   }
 }
+
 </script>
 
 <style scoped>
