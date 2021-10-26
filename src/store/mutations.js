@@ -3,6 +3,12 @@ export default {
   setItem (state, { resource, item }) {
     upsert(state[resource], docToResource(item))
   },
+  setAuthId (state, id) {
+    state.authId = id
+  },
+  setAuthUserUnsubscribe (state, unsubscribe) {
+    state.authUserUnsubscribe = unsubscribe
+  },
   appendUnsubscribe (state, { unsubscribe }) {
     state.unsubscribes.push(unsubscribe)
   },
