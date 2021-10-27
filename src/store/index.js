@@ -11,8 +11,10 @@ export default createStore({
     posts: [],
     users: [],
     authId: null,
+    // authId: '6qhwixrKlDNHEA9BMwqTOIAgj8H3',
     unsubscribes: [],
-    authUserUnsubscribe: null
+    authUserUnsubscribe: null,
+    authObserverUnsubscribe: null
   },
   getters,
   actions,
