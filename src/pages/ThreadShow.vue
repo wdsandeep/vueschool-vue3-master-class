@@ -48,22 +48,24 @@ export default {
     PostEditor
   },
   computed: {
-    ...mapGetters(['authUser']),
+    ...mapGetters('auth', ['authUser']),
     threads () {
-      return this.$store.state.threads
+      return this.$store.state.threads.items
     },
     posts () {
-      return this.$store.state.posts
+      return this.$store.state.posts.items
     },
     thread () {
-      return this.$store.getters.thread(this.id)
+      return this.$store.getters['threads/thread'](this.id)
     },
     threadPosts () {
       return this.posts.filter(post => post.threadId === this.id)
     }
   },
   methods: {
-    ...mapActions(['fetchThread', 'fetchUser', 'fetchPosts', 'fetchUsers', 'createPost']),
+    ...mapActions('threads', ['fetchThread']),
+    ...mapActions('users', ['fetchUser', 'fetchUsers']),
+    ...mapActions('posts', ['fetchPosts', 'createPost']),
     addPost (eventData) {
       const post = {
         ...eventData.post,

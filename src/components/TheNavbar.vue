@@ -32,7 +32,7 @@
             <div class="triangle-drop"></div>
             <ul class="dropdown-menu">
               <li class="dropdown-menu-item"><router-link :to="{name: 'Profile' }">View profile</router-link></li>
-              <li class="dropdown-menu-item"><a @click.prevent="$store.dispatch('signOut')">Sign Out</a></li>
+              <li class="dropdown-menu-item"><a @click.prevent="$store.dispatch('auth/signOut')">Sign Out</a></li>
             </ul>
           </div>
         </li>
@@ -77,7 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['authUser'])
+    ...mapGetters('auth', ['authUser'])
   }
 }
 </script>

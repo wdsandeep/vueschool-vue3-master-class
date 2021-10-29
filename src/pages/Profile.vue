@@ -49,7 +49,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'authUser' })
+    ...mapGetters('auth', { user: 'authUser' })
   },
   beforeRouteEnter () {
     // if (!store.state.authId) return { name: 'Home' }
@@ -61,7 +61,7 @@ export default {
     //
   },
   async created () {
-    await this.$store.dispatch('fetchAuthUsersPosts')
+    await this.$store.dispatch('auth/fetchAuthUsersPosts')
     this.asyncDataStatus_fetched()
   }
 }
