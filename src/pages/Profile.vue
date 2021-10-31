@@ -23,6 +23,10 @@
         <div class="activity-list">
 
           <PostList :posts="user.posts" />
+          <AppInfiniteScroll
+          @load="fetchUserPosts()"
+          :done="user.posts.length === user.postsCount"
+          />
 
         </div>
       </div>
@@ -36,11 +40,12 @@ import UserProfileCard from '@/components/UserProfileCard'
 import UserProfileCardEditor from '@/components/UserProfileCardEditor'
 import { mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import AppInfiniteScroll from '@/components/AppInfiniteScroll.vue'
 // import store from '@/store/index.js'
 
 export default {
   name: 'Profile',
-  components: { UserProfileCard, PostList, UserProfileCardEditor },
+  components: { UserProfileCard, PostList, UserProfileCardEditor, AppInfiniteScroll },
   mixins: [asyncDataStatus],
   props: {
     edit: {
@@ -49,7 +54,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('auth', { user: 'authUser' })
+    ...mapGetters('auth', { user: 'authUser' }),
+    lastPostFetched () {
+      if (this.user.posts.length === 0) return null
+      return this.user.posts[this.user.posts.length - 1]
+    }
+  },
+  methods: {
+    fetchUserPosts () {
+      return this.$store.dispatch('auth/fetchAuthUsersPosts', { startAfter: this.lastPostFetched })
+    }
   },
   beforeRouteEnter () {
     // if (!store.state.authId) return { name: 'Home' }
@@ -61,7 +75,12 @@ export default {
     //
   },
   async created () {
-    await this.$store.dispatch('auth/fetchAuthUsersPosts')
+    await this.fetchUserPosts()
+
+    // testing
+    // setTimeout(() => {
+    //   this.$store.dispatch('auth/fetchAuthUsersPosts', { startAfter: this.lastPostFetched })
+    // }, 2000)
     this.asyncDataStatus_fetched()
   }
 }
