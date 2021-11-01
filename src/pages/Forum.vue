@@ -72,6 +72,7 @@ export default {
     ...mapActions('users', ['fetchUsers'])
   },
   async created () {
+    console.log('forum created')
     const forum = await this.fetchForum({ id: this.id })
     // const threads = await this.fetchThreads({ ids: forum.threads })
     const threads = await this.fetchThreadsByPage({ ids: forum.threads, page: this.page, perPage: this.perPage })

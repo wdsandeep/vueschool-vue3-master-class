@@ -32,6 +32,8 @@ import PostEditor from '@/components/PostEditor'
 import AppDate from '@/components/AppDate'
 import { mapActions, mapGetters } from 'vuex'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
+import useNotifications from '@/composables/useNotifications'
+import difference from 'lodash/difference'
 
 export default {
   props: {
@@ -46,6 +48,11 @@ export default {
     AppDate,
     PostList,
     PostEditor
+  },
+  setup () {
+    const { addNotification } = useNotifications()
+    // addNotification({ message: 'dynamically added message!' })
+    return { addNotification }
   },
   computed: {
     ...mapGetters('auth', ['authUser']),
@@ -72,17 +79,46 @@ export default {
         threadId: this.id
       }
       this.createPost(post)
+    },
+    async fetchPostsWithUsers (ids) {
+      // fetch the posts
+      console.log('created ready? ', this.asyncDataStatus_ready)
+
+      const posts = await this.fetchPosts({
+        ids,
+        onSnapshot: ({ isLocal, previousItem }) => {
+          console.log(this.asyncDataStatus_ready)
+          if (!this.asyncDataStatus_ready || isLocal || (previousItem?.edited && !previousItem?.edited?.at)) return
+          this.addNotification({ message: 'Thread Recently updated', timeout: 5000 })
+        }
+      })
+      console.log('created ready? ', this.asyncDataStatus_ready)
+      // fetch the users associated with posts
+      const users = posts.map(post => post.userId).concat(this.thread.userId)
+      await this.fetchUsers({ ids: users })
     }
   },
   async created () {
     // fetch the thread
-    const thread = await this.fetchThread({ id: this.id })
+    console.log('created ready? ', this.asyncDataStatus_ready)
+    const thread = await this.fetchThread({
+      id: this.id,
+      onSnapshot: async ({ isLocal, item, previousItem }) => {
+        if (!this.asyncDataStatus_ready || isLocal) return
+        const newPosts = difference(item.posts, previousItem.posts)
+        const hasNewPosts = newPosts.length > 0
+        if (hasNewPosts) {
+          await this.fetchPostsWithUsers(newPosts)
+        } else {
+          this.addNotification({ message: 'Thread Recently updated' })
+        }
+      }
+    })
+    console.log('created ready? ', this.asyncDataStatus_ready)
 
-    // fetch the posts
-    const posts = await this.fetchPosts({ ids: thread.posts })
-    // fetch the users associated with posts
-    const users = posts.map(post => post.userId).concat(thread.userId)
-    await this.fetchUsers({ ids: users })
+    await this.fetchPostsWithUsers(thread.posts)
+    console.log('created ready? ', this.asyncDataStatus_ready)
+
     this.asyncDataStatus_fetched()
   }
 

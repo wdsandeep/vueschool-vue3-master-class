@@ -4,16 +4,18 @@
     <router-view v-show="showPage" @ready="onPageReady" :key="`${$route.path}${JSON.stringify($route.query)}`" />
     <AppSpinner v-show="!showPage" />
   </div>
+  <AppNotifications/>
 </template>
 
 <script>
+import AppNotifications from '@/components/AppNotifications'
 import TheNavbar from '@/components/TheNavbar'
 import { mapActions } from 'vuex'
 import NProgress from 'nprogress'
 
 export default {
   name: 'App',
-  components: { TheNavbar },
+  components: { TheNavbar, AppNotifications },
   data () {
     return {
       showPage: false

@@ -1,4 +1,4 @@
-import { findById, docToResource, makeAppendChildToParentMutation } from '@/helpers'
+import { findById, docToResource, makeAppendChildToParentMutation, makeFetchItemAction, makeFetchItemsAction } from '@/helpers'
 import firebase from 'firebase'
 import chunk from 'lodash/chunk'
 export default {
@@ -76,8 +76,10 @@ export default {
 
       return docToResource(newThread)
     },
-    fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'threads', id, emoji: '📄' }, { root: true }),
-    fetchThreads: ({ dispatch }, { ids }) => dispatch('fetchItems', { resource: 'threads', ids, emoji: '📄' }, { root: true }),
+    // fetchThread: ({ dispatch }, { id, once = false }) => dispatch('fetchItem', { resource: 'threads', id, once, emoji: '📄' }, { root: true }),
+    fetchThread: makeFetchItemAction({ resource: 'threads', emoji: '📄' }),
+    fetchThreads: makeFetchItemsAction({ resource: 'threads', emoji: '📄' }),
+    // fetchThreads: ({ dispatch }, { ids }) => dispatch('fetchItems', { resource: 'threads', ids, emoji: '📄' }, { root: true }),
     fetchThreadsByPage: async ({ dispatch, commit }, { ids, page, perPage = 10 }) => {
       commit('clearThreads')
       const chunks = chunk(ids, perPage)

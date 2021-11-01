@@ -1,4 +1,4 @@
-import { findById, docToResource, makeAppendChildToParentMutation } from '@/helpers'
+import { findById, docToResource, makeAppendChildToParentMutation, makeFetchItemAction, makeFetchItemsAction } from '@/helpers'
 import firebase from 'firebase'
 export default {
   namespaced: true,
@@ -58,8 +58,8 @@ export default {
       await userRef.update(updates)
       commit('setItem', { resource: 'users', item: user }, { root: true })
     },
-    fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'users', id, emoji: '🙋' }, { root: true }),
-    fetchUsers: ({ dispatch }, { ids }) => dispatch('fetchItems', { resource: 'users', ids, emoji: '🙋' }, { root: true })
+    fetchUser: makeFetchItemAction({ emoji: '🙋', resource: 'users' }),
+    fetchUsers: makeFetchItemsAction({ resource: 'users', emoji: '🙋' })
 
   },
   mutations: {
