@@ -2,17 +2,11 @@
     <div class="flex-grid justify-center">
         <div class="col-2">
 
-            <form @submit.prevent="signIn" action="" class="card card-form">
+            <VeeForm @submit="signIn" class="card card-form">
                 <h1 class="text-center">Login</h1>
 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input v-model="form.email" id="email" type="text" class="form-input">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input v-model="form.password" id="password" type="password" class="form-input">
-                </div>
+                <AppFormField v-model="form.email" name="email" label="Email" rules="required|email" />
+                <AppFormField v-model="form.password" name="password" label="Password" rules="required" />
 
                 <div class="push-top">
                     <button type="submit" class="btn-blue btn-block">Log in</button>
@@ -21,7 +15,7 @@
                 <div class="form-actions text-right">
                     <router-link :to="{name: 'Register'}">Create an account?</router-link>
                 </div>
-            </form>
+            </VeeForm>
 
             <div class="push-top text-center">
                 <button @click.prevent="signInWithGoogle" class="btn-red btn-xsmall"><i class="fa fa-google fa-btn"></i>Sign in with Google</button>
