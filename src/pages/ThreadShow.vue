@@ -110,7 +110,7 @@ export default {
         if (hasNewPosts) {
           await this.fetchPostsWithUsers(newPosts)
         } else {
-          this.addNotification({ message: 'Thread Recently updated' })
+          this.addNotification({ message: 'Thread Recently updated', timeout: 5000 })
         }
       }
     })

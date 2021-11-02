@@ -19,7 +19,6 @@
                 </div>
 
                 <div class="form-actions text-right">
-                    <a href="register.html">Create an account?</a>
                     <router-link :to="{name: 'Register'}">Create an account?</router-link>
                 </div>
             </form>

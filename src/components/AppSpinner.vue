@@ -11,7 +11,18 @@
 
 <script>
 export default {
-  name: 'AppSpinner'
+  name: 'AppSpinner',
+  props: {
+    color: {
+      type: String,
+      default: '#263959'
+    }
+  },
+  data () {
+    return {
+      spinnerColor: this.color
+    }
+  }
 }
 </script>
 
@@ -38,7 +49,7 @@ export default {
   display: block;
   width: 25%;
   height: 25%;
-  background-color: #263959;
+  background-color: v-bind(spinnerColor);
   border-radius: 100%;
   animation: sk-chase-dot-before 2.0s infinite ease-in-out both;
 }
