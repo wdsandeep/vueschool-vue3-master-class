@@ -6,7 +6,7 @@
                 <h1 class="text-center">Login</h1>
 
                 <AppFormField v-model="form.email" name="email" label="Email" rules="required|email" />
-                <AppFormField v-model="form.password" name="password" label="Password" rules="required" />
+                <AppFormField v-model="form.password" name="password" label="Password" rules="required" type="password" />
 
                 <div class="push-top">
                     <button type="submit" class="btn-blue btn-block">Log in</button>

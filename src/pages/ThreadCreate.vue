@@ -39,13 +39,13 @@ export default {
     ...mapActions('threads', ['createThread']),
     ...mapActions('forums', ['fetchForum']),
     async save ({ title, text }) {
-      console.log('hitting save')
+      // console.log('hitting save')
       const thread = await this.createThread({
         forumId: this.forum.id,
         title,
         text
       })
-      console.log('hitting save end')
+      // console.log('hitting save end')
       // dispatch a vuex action
       await this.$router.push({ name: 'ThreadShow', params: { id: thread.id } })
     },

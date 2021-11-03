@@ -43,13 +43,13 @@ export default {
     ...mapActions('threads', ['updateThread', 'fetchThread']),
     ...mapActions('posts', ['fetchPost']),
     async save ({ title, text }) {
-      console.log('hitting save')
+      // console.log('hitting save')
       const thread = await this.updateThread({
         id: this.id,
         title,
         text
       })
-      console.log('hitting save end')
+      // console.log('hitting save end')
       // dispatch a vuex action
       await this.$router.push({ name: 'ThreadShow', params: { id: thread.id } })
     },

@@ -55,7 +55,6 @@ const routes = [
       await store.dispatch('threads/fetchThread', { id: to.params.id, once: true })
       // check if thread exists
       const threadExists = findById(store.state.threads.items, to.params.id)
-      // console.log('threadExists', threadExists)
       // if exists continue
       if (threadExists) {
         return next()
@@ -117,6 +116,10 @@ const router = createRouter({
     if (to.meta.smoothScroll) scroll.behavior = 'smooth'
     return scroll // { top: 0, behavior: 'smooth' } //scroll
   }
+})
+
+router.afterEach(() => {
+  store.dispatch('clearItems', { modules: ['categories', 'forums', 'posts', 'threads'] })
 })
 
 router.beforeEach(async (to, from) => {

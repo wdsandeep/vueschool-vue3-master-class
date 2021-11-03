@@ -1,6 +1,5 @@
 <template>
   <div class="container" style="width:100%;">
-    <h1>My Profile</h1>
     <div class="flex-grid">
       <div class="col-3 push-top">
 
@@ -15,7 +14,6 @@
                   <span class="text-lead">
                       {{user.username}}'s recent activity
                   </span>
-          <a href="#">See only started threads?</a>
         </div>
 
         <hr>

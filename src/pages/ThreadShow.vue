@@ -14,7 +14,7 @@
     </h1>
     <p>
       By <a href="#" class="link-unstyled">{{ thread.author?.name }}</a>, <AppDate :timestamp="thread.publishedAt" />.
-      <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">{{ thread.repliesCount }} replies by {{ thread.contributorsCount }} contributors</span>
+      <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">{{ thread.repliesCount }} {{thread.repliesCount === 1 ? 'reply' : 'replies'}} by {{ thread.contributorsCount }} {{thread.contributorsCount === 1 ? 'contributor' : 'contributors'}}</span>
     </p>
     <post-list :posts="threadPosts" />
     <post-editor v-if="authUser" @save="addPost" />
@@ -82,17 +82,14 @@ export default {
     },
     async fetchPostsWithUsers (ids) {
       // fetch the posts
-      console.log('created ready? ', this.asyncDataStatus_ready)
 
       const posts = await this.fetchPosts({
         ids,
         onSnapshot: ({ isLocal, previousItem }) => {
-          console.log(this.asyncDataStatus_ready)
           if (!this.asyncDataStatus_ready || isLocal || (previousItem?.edited && !previousItem?.edited?.at)) return
           this.addNotification({ message: 'Thread Recently updated', timeout: 5000 })
         }
       })
-      console.log('created ready? ', this.asyncDataStatus_ready)
       // fetch the users associated with posts
       const users = posts.map(post => post.userId).concat(this.thread.userId)
       await this.fetchUsers({ ids: users })
@@ -100,7 +97,6 @@ export default {
   },
   async created () {
     // fetch the thread
-    console.log('created ready? ', this.asyncDataStatus_ready)
     const thread = await this.fetchThread({
       id: this.id,
       onSnapshot: async ({ isLocal, item, previousItem }) => {
@@ -114,10 +110,8 @@ export default {
         }
       }
     })
-    console.log('created ready? ', this.asyncDataStatus_ready)
 
     await this.fetchPostsWithUsers(thread.posts)
-    console.log('created ready? ', this.asyncDataStatus_ready)
 
     this.asyncDataStatus_fetched()
   }
